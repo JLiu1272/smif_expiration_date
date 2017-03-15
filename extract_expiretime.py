@@ -1,7 +1,7 @@
 #import statements for all necessary components
 from bs4 import BeautifulSoup
 import urllib.request
-import pandas as pd
+import pprint
 
 #Exporting extracted data as CSV
 import csv
@@ -19,6 +19,9 @@ page = urllib.request.urlopen(source)
 #Parse the html in the 'page' variable, and store it in Beautiful Soup format
 soup = BeautifulSoup(page, "html.parser")
 
+"""
+Grabbing data from website
+"""
 def extract_details():
     header = []
     title = soup.find_all('span', {'class': 'style4'})
@@ -26,10 +29,6 @@ def extract_details():
         header.append(i.text)
     dict = {}
     table = soup.find_all('table')
-    product_name = []
-    room_temp = []
-    refridg = []
-    freezer = []
 
     for tag in table:
         for tr in tag.find_all('tr'):
@@ -44,39 +43,50 @@ def extract_details():
                 else:
                     dict.update({tab_det[0].text: [tab_det[1].text, tab_det[2].text, tab_det[3].text]})
 
-    #df = pd.DataFrame(product_name, columns=['header'])
-    #df['Room Temperature'] = room_temp
-    #df['Refrigerator'] = refridg
-    #df['Freezer'] = freezer
-
-    #print(df)
     return dict
 
-def export_json(dict, file):
+"""
+Extracting file as json file
+"""
+def export_json(dicts, file):
     # open the file "filename" in write ("w") mode
-    with open(file, "w") as jsonfile:
-        # just an example dictionary to be dumped into "filename"
-        # dumps "output" encoded in the JSON format into "filename"
-        json.dump(dict, jsonfile)
-        jsonfile.close()
+    with open(file,"w") as fp:
+        json.dump(dicts, fp, indent=4, sort_keys=True)
 
+"""
+Reading json data
+"""
+def read_json(file):
+    with open(file, 'r') as f:
+        data = json.load(f)
+    return data
+
+"""
+Extracting as CSV
+"""
 def export_csv(dict, csvfile):
     with open(csvfile, 'w') as csvfile:
         w = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
-        #w.writeheader()
-        #w.writerow(dict)
-        #print(dict)
-        #Test to make sure dictionary has necessary items
         for key, value in dict.items():
             w.writerow([key])
             w.writerow([value])
 
-
+def open_json(file):
+    json_data=open(file).read()
+    data = json.loads(json_data)
+    print(data)
 
 def main():
     list = extract_details()
-    export_csv(list, csvfile)
-    export_csv(list, "jsonfile.json")
+    #export_csv(list, csvfile)
+    #export_csv(list, "jsonfile.json")
+
+
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(json.dumps(list))
+    export_json(list,"jsonfile.json")
+    """with open("jsonfile.json","w") as fp:
+        json.dump(list, fp, indent=4, sort_keys=True)"""
 
 if __name__ == "__main__":
     main()
