@@ -1,8 +1,10 @@
 import requests
 from datetime import timedelta
 import datetime
+import re
 
-url = "http://107.23.213.161/expiration_database.json"
+url_exp = "http://107.23.213.161/expiration_database.json"
+url_add = "http://107.23.213.161/addItem.php"
 
 """
 Type = Where is the food being placed
@@ -13,11 +15,32 @@ Type = Where is the food being placed
 def getRequest(url, food, type):
     r = requests.get(url)
     json = r.json()
-    return json[food][type]
+    lower_food = food.lower()
 
+    filtered = {}
+    if lower_food not in json.keys():
+        for key in json:
+            regex = r"" + re.escape(food)
+            need_match = re.search(regex, key)
+            if need_match is not None:
+                filtered[need_match.group(0)] = json[key]
+                return filtered[need_match.group(0)][type]
+    return json[lower_food][type]
+
+"""
+Post data to database
+"""
+def post_data(url,food, date_in, date_left):
+    data = {'name': "002" + food, 'date_in': date_in, 'date_left': date_left}
+    r = requests.post(url, data)
+    print(r.status_code)
+
+"""
+Compute Expiration Date
+"""
 def computeDateLeft(date, food, type):
     today = datetime.datetime.now()
-    data = getRequest(url, food, type)
+    data = getRequest(url_exp, food, type)
     dateleft = ""
 
     if type == 2 and data == "" or data == "\u00a0":
@@ -29,21 +52,28 @@ def computeDateLeft(date, food, type):
         print("Month: " + str(week))
         dateleft = date + timedelta(week)
     elif "day" in data or "days" in data:
-        dateleft = date + timedelta(days=data[0])
+        dateleft = date + timedelta(days=int(data[0]))
     elif "year" in data or "years" in data:
         year = int(data[0])*365
         dateleft = date + timedelta(int(year))
+    elif "week" in data or "weeks" in data:
+        week = int(data[0])
+        dateleft = date + timedelta(week)
 
     return dateleft
 
 
 def main():
     today = datetime.datetime.now()
-    data = getRequest(url, "Canned fruit", 0)
-    print(data)
+    food = "eggs"
+    date_left = computeDateLeft(today, food, 1)
+
+    data = getRequest(url_exp, food, 1)
+    #print(data)
     print("Today:  " + str(today))
     print("Data: " + str(data))
-    print(computeDateLeft(today, "Canned fruit", 0))
+    print(date_left)
+    post_data(url_add, food, today, date_left)
 
 if __name__ == "__main__":
     main()
