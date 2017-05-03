@@ -24,6 +24,16 @@
         "",
         "\u00a0"
     ],
+    "banana": [
+        "1 month",
+        "1 month",
+        "1 month"
+    ],
+    "peanutbutter": [
+        "1 year",
+        "1 year",
+        "1 year"
+    ],
     "baking soda": [
         "2 years",
         "",
@@ -374,7 +384,7 @@
         "2-3 weeks",
         "1-2 months"
     ],
-    "hardcooked eggs": [
+    "eggs": [
         "",
         "1 week",
         "not recommended"
@@ -428,6 +438,11 @@
         "",
         "1 month",
         "12 months"
+    ],
+    "oranges": [
+        "",
+        "4 weeks",
+        "1 months"
     ],
     "mayonnaise": [
         "",
