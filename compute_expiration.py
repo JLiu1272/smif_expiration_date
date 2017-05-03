@@ -19,9 +19,10 @@ def getRequest(url, food, type):
     lower_food = food.lower()
 
     filtered = {}
+    print(json[lower_food])
     if lower_food not in json.keys():
         for key in json:
-            regex = r"" + re.escape(food)
+            regex = r"" + re.escape(lower_food)
             need_match = re.search(regex, key)
             if need_match is not None:
                 filtered[need_match.group(0)] = json[key]
@@ -66,7 +67,7 @@ def computeDateLeft(date, food, type):
 
 def main():
     today = datetime.datetime.now()
-    food = "milk"
+    food = "Cereals"
     date_left = computeDateLeft(today, food, 1)
 
     data = getRequest(url_exp, food, 1)
