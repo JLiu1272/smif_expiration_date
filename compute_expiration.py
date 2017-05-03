@@ -2,6 +2,7 @@ import requests
 from datetime import timedelta
 import datetime
 import re
+import json
 
 url_exp = "http://107.23.213.161/expiration_database.json"
 url_add = "http://107.23.213.161/addItem.php"
@@ -33,7 +34,7 @@ Post data to database
 def post_data(url,food, date_in, date_left):
     data = {'name': "002" + food, 'date_in': date_in, 'date_left': date_left}
     r = requests.post(url, data)
-    print(r.status_code)
+    print(r.text)
 
 """
 Compute Expiration Date
@@ -65,7 +66,7 @@ def computeDateLeft(date, food, type):
 
 def main():
     today = datetime.datetime.now()
-    food = "eggs"
+    food = "milk"
     date_left = computeDateLeft(today, food, 1)
 
     data = getRequest(url_exp, food, 1)

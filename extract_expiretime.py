@@ -35,13 +35,13 @@ def extract_details():
             tab_det = tr.find_all('td')
             if len(tab_det) == 4:
                 if tab_det[1].text == '\xa0':
-                    dict.update({tab_det[0].text: ['', tab_det[2].text, tab_det[3].text]})
+                    dict.update({tab_det[0].text.lower(): ['', tab_det[2].text.lower(), tab_det[3].text.lower()]})
                 elif tab_det[2].text == '\xa0':
-                    dict.update({tab_det[0].text: [tab_det[1].text, '', tab_det[3].text]})
+                    dict.update({tab_det[0].text.lower(): [tab_det[1].text.lower(), '', tab_det[3].text.lower()]})
                 elif tab_det[3].text == '\xa0':
-                    dict.update({tab_det[0].text: [tab_det[1].text, tab_det[2].text, '']})
+                    dict.update({tab_det[0].text.lower(): [tab_det[1].text.lower(), tab_det[2].text.lower(), '']})
                 else:
-                    dict.update({tab_det[0].text: [tab_det[1].text, tab_det[2].text, tab_det[3].text]})
+                    dict.update({tab_det[0].text.lower(): [tab_det[1].text.lower(), tab_det[2].text.lower(), tab_det[3].text.lower()]})
 
     return dict
 
@@ -78,12 +78,6 @@ def open_json(file):
 
 def main():
     list = extract_details()
-    #export_csv(list, csvfile)
-    #export_csv(list, "jsonfile.json")
-
-
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(json.dumps(list))
     export_json(list,"jsonfile.json")
     """with open("jsonfile.json","w") as fp:
         json.dump(list, fp, indent=4, sort_keys=True)"""
