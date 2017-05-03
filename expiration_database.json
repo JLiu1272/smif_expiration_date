@@ -14,6 +14,11 @@
         "7 days",
         "1 month"
     ],
+    "pringles": [
+        "",
+        "1 year",
+        "1 month"
+    ],
     "baking powder": [
         "18 months",
         "",
@@ -584,7 +589,7 @@
         "2-4 days",
         "1 year"
     ],
-    "ready-to-eat cereals": [
+    "cereals": [
         "1 year",
         "",
         "\u00a0"
@@ -604,7 +609,7 @@
         "",
         "\u00a0"
     ],
-    "rolls and bread, unbaked": [
+    "bread": [
         "",
         "2-3 weeks",
         "1 month"
